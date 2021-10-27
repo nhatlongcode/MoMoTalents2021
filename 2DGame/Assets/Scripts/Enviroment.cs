@@ -7,6 +7,7 @@ public class Enviroment : MonoBehaviour
     public float spawnDuration;
     public Vector2 spawnRange;
     public GameObject fruitPrefab;
+    public List<Color> fruitRandomColors;
     private float _time = 0.0f;
     private void Update() 
     {
@@ -24,6 +25,8 @@ public class Enviroment : MonoBehaviour
         Vector2 pos = new Vector2(
             Random.Range(camPos.x - spawnRange.x, camPos.x + spawnRange.x),
             Random.Range(camPos.y - spawnRange.y, camPos.y + spawnRange.y));
-        Instantiate(fruitPrefab,pos, Quaternion.identity, this.transform);
+        Color color = fruitRandomColors[Random.Range(0, fruitRandomColors.Count)];
+        GameObject go = Instantiate(fruitPrefab,pos, Quaternion.identity, this.transform);
+        go.GetComponent<Light>().color = color;
     }
 }
