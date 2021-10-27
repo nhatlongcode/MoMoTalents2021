@@ -11,10 +11,8 @@ public class Snake : MonoBehaviour
     public Transform lastNode;
     public float bodySmoothTime;
     public SnakeBody bodyPrefab;
-    public float turnrate;
     public List<SnakeBody> bodyParts;
     private Vector2 mousePos;
-    public Vector3 pointInWorld, direction;
     void Awake()
     {
         currentSpeed = defaultSpeed;
@@ -23,18 +21,15 @@ public class Snake : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(mousePos);
+        HeadFollowMouse();
+        SpeedUp();
         MoveForward();
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePos - (Vector2) head.transform.position).normalized;
-        head.up = Vector2.Lerp(head.up, direction, Time.deltaTime * turnSpeed);
 
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             AddNewSnakeBody();
         }
-        SpeedUp();
 
     }
 
@@ -55,6 +50,13 @@ public class Snake : MonoBehaviour
             body.smoothTime = bodySmoothTime;
             body.ProcessUpdate();
         }
+    }
+
+    private void HeadFollowMouse()
+    {
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - (Vector2) head.transform.position).normalized;
+        head.up = Vector2.Lerp(head.up, direction, Time.deltaTime * turnSpeed);
     }
 
     private void SpeedUp()
