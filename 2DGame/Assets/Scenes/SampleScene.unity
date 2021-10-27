@@ -291,7 +291,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 80252174}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.4599991, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1460655638}
@@ -546,9 +546,11 @@ MonoBehaviour:
   currentRotaion: 0
   rorationSensivity: 300
   head: {fileID: 80252175}
+  radius: 3
   lastNode: {fileID: 0}
   bodySmoothTime: 0.125
   bodyPrefab: {fileID: 3534894199914443851, guid: 53df44fd1bf931742b1eb7f1ba5c80f1, type: 3}
+  turnrate: 0.5
   bodyParts: []
 --- !u!4 &1460655638
 Transform:
@@ -559,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 1460655636}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 80252175}
   m_Father: {fileID: 0}

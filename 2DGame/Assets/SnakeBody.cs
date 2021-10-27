@@ -4,6 +4,7 @@ public class SnakeBody : MonoBehaviour
 {
     public Transform PreviousNode;
     public float smoothTime;
+    public SpriteRenderer spriteRenderer;
     private Vector3 velocity;
 
 

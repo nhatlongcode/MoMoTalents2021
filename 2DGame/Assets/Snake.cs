@@ -6,14 +6,15 @@ public class Snake : MonoBehaviour
     public float defaultSpeed;
     public float extraSpeed;
     public float currentSpeed;
-    public float currentRotaion;
-    public float rorationSensivity;
     public Transform head;
+    public float turnSpeed;
     public Transform lastNode;
     public float bodySmoothTime;
     public SnakeBody bodyPrefab;
+    public float turnrate;
     public List<SnakeBody> bodyParts;
-    private Vector3 movementVelocity;
+    private Vector2 mousePos;
+    public Vector3 pointInWorld, direction;
     void Awake()
     {
         currentSpeed = defaultSpeed;
@@ -22,29 +23,18 @@ public class Snake : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(Input.mousePosition);
-        // mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		// direction = Vector3.Slerp(direction, mousePos-(Vector2)transform.position, Time.deltaTime * 1);
-		// transform.up = direction;
+        Debug.Log(mousePos);
+        MoveForward();
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - (Vector2) head.transform.position).normalized;
+        head.up = Vector2.Lerp(head.up, direction, Time.deltaTime * turnSpeed);
 
-        // Vector2 deltaMove = (mousePos - (Vector2)this.transform.position).normalized * speed * Time.deltaTime;
-        // transform.position += new Vector3(deltaMove.x, deltaMove.y,0);
-        if (Input.GetKey(KeyCode.A))
-        {
-            currentRotaion +=  rorationSensivity * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            currentRotaion -=  rorationSensivity * Time.deltaTime;
-        }
+
         if (Input.GetKeyDown(KeyCode.P))
         {
             AddNewSnakeBody();
         }
         SpeedUp();
-        MoveForward();
-        //MoveBody();
-        Rotation();
 
     }
 
@@ -59,18 +49,12 @@ public class Snake : MonoBehaviour
     private void MoveForward()
     {
         head.transform.position += head.transform.up * currentSpeed * Time.deltaTime;
-        //this.transform.position = head.transform.position;
 
         foreach(var body in bodyParts)
         {
             body.smoothTime = bodySmoothTime;
             body.ProcessUpdate();
         }
-    }
-
-    private void Rotation()
-    {
-        head.transform.rotation = Quaternion.Euler(Vector3.forward*currentRotaion);
     }
 
     private void SpeedUp()
