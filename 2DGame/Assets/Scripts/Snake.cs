@@ -6,9 +6,13 @@ public class Snake : MonoBehaviour
     public float defaultSpeed;
     public float extraSpeed;
     public float currentSpeed;
-    public Transform head;
+    public float defaultSize;
+    public float growthSize;
+    public float currentSize;
+    public HeadColliderInteract head;
     public float turnSpeed;
-    public float bodySmoothTime;
+    public float bodyFollowTime;
+    public float bodyFollowGrowth;
     public SnakeBody bodyPrefab;
     public int minBodyCount;
     private Transform _lastNode;
@@ -17,7 +21,8 @@ public class Snake : MonoBehaviour
     private int _currentOrder;
     void Awake()
     {
-        ResetParameters();
+        _bodyParts = new List<SnakeBody>();
+        Init();
         Reset();
     }   
 
@@ -27,24 +32,27 @@ public class Snake : MonoBehaviour
         SpeedUp();
         MoveForward();
 
+        CheatKey();
+    }
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            AddNewSnakeBody();
-        }
-
+    public void Init()
+    {
+        LinkHeadEvent();
     }
 
     public void Reset()
     {
+        ResetParameters();
         ClearSnakeBody();
         AddNewSnakeBodies(minBodyCount);
+        SetDefaultSize();
+        UpdateSize();
     }
 
     public void ResetParameters()
     {
         currentSpeed = defaultSpeed;
-        _lastNode = head;
+        _lastNode = head.transform;
         _currentOrder = -1;
     }
 
@@ -53,6 +61,7 @@ public class Snake : MonoBehaviour
         SnakeBody body = Instantiate(bodyPrefab, _lastNode.position, Quaternion.identity, this.transform);
         body.PreviousNode = _lastNode;
         body.spriteRenderer.sortingOrder = _currentOrder;;
+        body.transform.localScale = Vector3.one * currentSize;
         _currentOrder--;
         _lastNode = body.transform;
         _bodyParts.Add(body);
@@ -74,14 +83,47 @@ public class Snake : MonoBehaviour
         }
     }
 
+    private void LinkHeadEvent()
+    {
+        head.EAT_FRUIT_EVENT += EatFruit;
+        head.TOUCH_OBS_EVENT += TouchObs;
+    }
+
+    private void UnlinkHeadEvent()
+    {
+        head.EAT_FRUIT_EVENT -= EatFruit;
+        head.TOUCH_OBS_EVENT -= TouchObs;
+    }
+
+    private void EatFruit()
+    {
+        Growth();
+        AddNewSnakeBody();
+    }
+
+    private void TouchObs()
+    {
+
+    }
+
     private void MoveForward()
     {
         head.transform.position += head.transform.up * currentSpeed * Time.deltaTime;
 
         foreach(var body in _bodyParts)
         {
-            body.smoothTime = bodySmoothTime;
+            body.smoothTime = bodyFollowTime;
             body.ProcessUpdate();
+        }
+    }
+
+    private void UpdateSize()
+    {
+        //this.transform.localScale = Vector3.one * currentSize;
+        head.transform.localScale = Vector3.one * currentSize;
+        foreach (var body in _bodyParts)
+        {
+            body.transform.localScale = Vector3.one * currentSize;
         }
     }
 
@@ -89,7 +131,7 @@ public class Snake : MonoBehaviour
     {
         _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (_mousePos - (Vector2) head.transform.position).normalized;
-        head.up = Vector2.Lerp(head.up, direction, Time.deltaTime * turnSpeed);
+        head.transform.up = Vector2.Lerp(head.transform.up, direction, Time.deltaTime * turnSpeed);
     }
 
     private void SpeedUp()
@@ -101,6 +143,23 @@ public class Snake : MonoBehaviour
         else currentSpeed = defaultSpeed;
     }
 
+    private void SetDefaultSize()
+    {
+        currentSize = defaultSize;
+    }
 
+    private void Growth()
+    {
+        currentSize += growthSize;
+        UpdateSize();
+    }
+
+    private void CheatKey()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AddNewSnakeBody();
+        }
+    }
 
 }
