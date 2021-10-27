@@ -8,15 +8,17 @@ public class Snake : MonoBehaviour
     public float currentSpeed;
     public Transform head;
     public float turnSpeed;
-    public Transform lastNode;
     public float bodySmoothTime;
     public SnakeBody bodyPrefab;
-    public List<SnakeBody> bodyParts;
-    private Vector2 mousePos;
+    public int minBodyCount;
+    private Transform _lastNode;
+    private List<SnakeBody> _bodyParts;
+    private Vector2 _mousePos;
+    private int _currentOrder;
     void Awake()
     {
-        currentSpeed = defaultSpeed;
-        lastNode = head;
+        ResetParameters();
+        Reset();
     }   
 
     void Update()
@@ -33,19 +35,50 @@ public class Snake : MonoBehaviour
 
     }
 
+    public void Reset()
+    {
+        ClearSnakeBody();
+        AddNewSnakeBodies(minBodyCount);
+    }
+
+    public void ResetParameters()
+    {
+        currentSpeed = defaultSpeed;
+        _lastNode = head;
+        _currentOrder = -1;
+    }
+
     public void AddNewSnakeBody()
     {
-        SnakeBody body = Instantiate(bodyPrefab, lastNode.position, Quaternion.identity, this.transform);
-        body.PreviousNode = lastNode;
-        lastNode = body.transform;
-        bodyParts.Add(body);
+        SnakeBody body = Instantiate(bodyPrefab, _lastNode.position, Quaternion.identity, this.transform);
+        body.PreviousNode = _lastNode;
+        body.spriteRenderer.sortingOrder = _currentOrder;;
+        _currentOrder--;
+        _lastNode = body.transform;
+        _bodyParts.Add(body);
+    }
+
+    public void AddNewSnakeBodies(int amout)
+    {
+        for (int i=0; i<amout; i++)
+        {
+            AddNewSnakeBody();
+        }
+    }
+
+    public void ClearSnakeBody()
+    {
+        foreach (var body in _bodyParts)
+        {
+            Destroy(body.gameObject);
+        }
     }
 
     private void MoveForward()
     {
         head.transform.position += head.transform.up * currentSpeed * Time.deltaTime;
 
-        foreach(var body in bodyParts)
+        foreach(var body in _bodyParts)
         {
             body.smoothTime = bodySmoothTime;
             body.ProcessUpdate();
@@ -54,8 +87,8 @@ public class Snake : MonoBehaviour
 
     private void HeadFollowMouse()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePos - (Vector2) head.transform.position).normalized;
+        _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (_mousePos - (Vector2) head.transform.position).normalized;
         head.up = Vector2.Lerp(head.up, direction, Time.deltaTime * turnSpeed);
     }
 
@@ -68,13 +101,6 @@ public class Snake : MonoBehaviour
         else currentSpeed = defaultSpeed;
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
-    {
-        if (other.gameObject.tag == "Fruit")
-        {
-            Destroy(other.gameObject);
-            Debug.Log("collision");
-        }    
-    }
+
 
 }

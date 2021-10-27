@@ -8,11 +8,6 @@ public class SnakeBody : MonoBehaviour
     private Vector3 velocity;
 
 
-    private void Update() 
-    {
-
-    }
-
     public void ProcessUpdate()
     {
         Move();
