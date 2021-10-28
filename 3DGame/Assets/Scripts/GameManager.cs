@@ -5,34 +5,38 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
     public Cube cubePrefab;
     public Transform spawnPoint;
     public Transform touchPoint;
-    public float spawnTime = 1.0f;
     public float spawnTimeCount;
     public float speed;
+    public Ball ball;
     public AudioSource audioSource;
     public AudioClip music;
     public string musicNotePath = "Assets/Resources/BeWithYou_Mondays_chart.bin";
-    public int poolAmoumt;
+    public int currentNote;
     private Content.BeatData _beatData;
-    private int _currentNote;
-    private float _timeDelay;
-    private Queue<Cube> _cubePool;
     private List<Cube> _listCube;
 
-    private void Awake() {
-        Application.targetFrameRate = 60;
+    private void Awake() 
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+        }
+        else 
+        {
+            Instance = this;
+        }
         LoadData();
+        InitAllCube();
         //InitCubePool();
         spawnTimeCount = 0.0f;
         audioSource = this.GetComponent<AudioSource>();
         audioSource.clip = music;
-        _currentNote = 0;
-
-
+        currentNote = 0;
     }
-
     private void Start()
     {
         audioSource.Play();
@@ -40,18 +44,26 @@ public class GameManager : MonoBehaviour
 
     private void Update() 
     {
-    
+        ball.MoveProcess();
+        foreach(var cube in _listCube)
+        {
+            cube.MoveProcess();
+        }
     }
 
     public void LoadData()
     {
         _beatData = ReadMusicData(musicNotePath);
+    }
+
+    public void InitAllCube()
+    {
         _listCube = new List<Cube>();
         for (int i=0; i< _beatData.noteDatas.Count; i++)
         {
-            float s = speed * _beatData.noteDatas[i].timestamp * 60;
+            float s = speed * _beatData.noteDatas[i].timestamp;
             Cube cube = Instantiate(cubePrefab, touchPoint.position + Vector3.forward * s, Quaternion.identity, this.transform);
-            cube.SetSpeed(speed);
+            cube.Init(speed, touchPoint.transform.position);
             _listCube.Add(cube);
         }
     }
@@ -68,22 +80,10 @@ public class GameManager : MonoBehaviour
         return data;
     }
 
-    public void InitCubePool()
+    public Vector3 GetCurrentCubePos()
     {
-        _cubePool = new Queue<Cube>();
-        for (int i=0; i<poolAmoumt; i++)
-        {
-            Cube cube = Instantiate(cubePrefab, spawnPoint.position, Quaternion.identity, this.transform);
-            cube.Init();
-            _cubePool.Enqueue(cube);
-        }
+        //currentNote++;
+        return _listCube[currentNote].transform.position;
     }
 
-    public void Spawn()
-    {
-        Cube cube = _cubePool.Dequeue();
-        cube.transform.position = spawnPoint.position;
-        cube.Spawn(speed);
-        _cubePool.Enqueue(cube);
-    }
 }

@@ -3,23 +3,19 @@ using UnityEngine;
 public class Cube : MonoBehaviour 
 {
     private float _speed;
-    public void Init()
-    {
-       // this.gameObject.SetActive(false);
-    }
-    public void Spawn(float speed)
-    {
-        this.gameObject.SetActive(true);
-        _speed = speed;
-    }    
-
-    public void SetSpeed(float speed)
+    private Vector3 _des;
+    public void Init(float speed, Vector3 des)
     {
         _speed = speed;
+        _des = des;
     }
 
-    private void Update() 
+    public void MoveProcess() 
     {
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + Vector3.back * 10, _speed);
+        Vector3 pos = this.transform.position;
+        pos.z -= _speed * Time.deltaTime;
+        this.transform.position = pos;
+        //hard code
+        if (this.transform.position.z < -5.0f) this.gameObject.SetActive(false);
     }
 }
