@@ -21,5 +21,21 @@ public class SnakeHead : MonoBehaviour
             EAT_FRUIT_EVENT?.Invoke();
             Destroy(other.gameObject);
         }
+
+        if (this.gameObject.tag == "PlayerHead")
+        {
+            if (other.tag == "BotBody")
+            {
+                TOUCH_OBS_EVENT?.Invoke();
+            }
+        }
+
+        if (this.gameObject.tag == "BotHead")
+        {
+            if (other.tag == "PlayerBody")
+            {
+                TOUCH_OBS_EVENT?.Invoke();
+            }
+        }
     }
 }

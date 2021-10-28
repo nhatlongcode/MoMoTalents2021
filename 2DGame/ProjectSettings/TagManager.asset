@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Fruit
   - Obstacle
+  - PlayerHead
+  - PlayerBody
+  - BotHead
+  - BotBody
   layers:
   - Default
   - TransparentFX

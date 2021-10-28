@@ -32,10 +32,18 @@ public class Snake : MonoBehaviour
 
     private void Update()
     {
-        HeadFollowMouse();
-        SpeedUp();
+        if (!isBot)
+        {
+            HeadFollowMouse();
+            SpeedUp();
+            CheatKey();
+        }
+        else 
+        {
+            MoveToSnakePlayer();
+        }
+
         MoveForward();
-        CheatKey();
         CheckLife();
     }
 
@@ -75,11 +83,24 @@ public class Snake : MonoBehaviour
         currentSpeed = defaultSpeed;
         _lastNode = head.transform;
         _currentOrder = -1;
+        if (isBot) head.tag = "BotHead";
     }
 
     public void ResetPosition()
     {
-        head.transform.position =  Vector3.zero;
+        if (isBot)
+        {
+            float posX = Random.Range(-40,40);
+            float posY = Random.Range(-40,40);
+            this.transform.position = new Vector3(posX, posY, 0);
+        }
+        head.transform.position =  this.transform.position;
+    }
+
+    public void MoveToSnakePlayer()
+    {
+        Vector2 direction = ((Vector2)GameManager.Instance.playerSnake.transform.position - (Vector2) head.transform.position).normalized;
+        head.transform.up = Vector2.Lerp(head.transform.up, direction, Time.deltaTime * turnSpeed);
     }
 
     public void AddNewSnakeBody()
@@ -89,6 +110,7 @@ public class Snake : MonoBehaviour
         body.spriteRenderer.sortingOrder = _currentOrder;;
         body.spriteRenderer.sprite = currentSkin.bodySprite;
         body.transform.localScale = Vector3.one * currentSize;
+        if (isBot) body.tag = "BotBody";
         _currentOrder--;
         _lastNode = body.transform;
         _bodyParts.Add(body);

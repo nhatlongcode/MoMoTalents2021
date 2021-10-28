@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78f3dc62209954746a40a91bacfe05a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchColor: {r: 0.7921569, g: 0.25882354, b: 0.7477833, a: 1}

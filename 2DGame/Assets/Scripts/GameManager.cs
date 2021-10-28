@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
     //Hard code for speed
     public SnakeData data;
     public List<SnakeThemeData> skins;
-    public CameraFollow cameraFollow;
+    public GameObject playerSnake;
+    public int botAmount;
 
     public Snake snakePrefab;
     private Snake _currentSnake;
 
     private void Awake() 
     {
-        //_currentSnake = Instantiate(snakePrefab, Vector3.zero, Quaternion.identity);
-        //cameraFollow.target = _currentSnake.head.transform;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+        }
+        else 
+        {
+            Instance = this;
+        }
+        InitSnakeBot();
     }
 
     private void Update() 
@@ -23,7 +32,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void InitSnake()
+    public void InitSnakeBot()
     {
 
     }

@@ -63,6 +63,7 @@ public class Ball : MonoBehaviour
     {
         if (other.tag == "Cube")
         {
+            other.GetComponent<Cube>().Touch();
             timeCounter = 0.0f;
             Vector3 resetPos = new Vector3(transform.position.x, beginPos.y, transform.position.z);
             this.transform.position = resetPos;
