@@ -15,38 +15,55 @@ public class Snake : MonoBehaviour
     public float bodyFollowGrowth;
     public SnakeBody bodyPrefab;
     public int minBodyCount;
+    public int startBodyCount;
     private Transform _lastNode;
     private List<SnakeBody> _bodyParts;
     private Vector2 _mousePos;
     private int _currentOrder;
+    private bool _isDead;
     void Awake()
     {
-        _bodyParts = new List<SnakeBody>();
         Init();
         Reset();
     }   
 
-    void Update()
+    private void Update()
     {
         HeadFollowMouse();
         SpeedUp();
         MoveForward();
-
         CheatKey();
+        CheckLife();
     }
 
     public void Init()
     {
+        _bodyParts = new List<SnakeBody>();
         LinkHeadEvent();
     }
 
     public void Reset()
     {
         ResetParameters();
+        ResetPosition();
         ClearSnakeBody();
-        AddNewSnakeBodies(minBodyCount);
+        AddNewSnakeBodies(startBodyCount);
         SetDefaultSize();
         UpdateSize();
+        _isDead = false;
+    }
+
+    public void AssignData(SnakeData data)
+    {
+        this.defaultSpeed = data.defaultSpeed;
+        this.extraSpeed = data.extraSpeed;
+        this.turnSpeed = data.turnSpeed;
+        this.defaultSize = data.defaultSize;
+        this.growthSize = data.growthSize;
+        this.minBodyCount = data.bodyMinCount;
+        this.startBodyCount = data.bodyStartCount;
+        this.bodyFollowTime = data.bodyFollowTime;
+        this.bodyFollowGrowth = data.bodyFollowGrowth;
     }
 
     public void ResetParameters()
@@ -54,6 +71,11 @@ public class Snake : MonoBehaviour
         currentSpeed = defaultSpeed;
         _lastNode = head.transform;
         _currentOrder = -1;
+    }
+
+    public void ResetPosition()
+    {
+        head.transform.position =  Vector3.zero;
     }
 
     public void AddNewSnakeBody()
@@ -81,6 +103,7 @@ public class Snake : MonoBehaviour
         {
             Destroy(body.gameObject);
         }
+        _bodyParts.Clear();
     }
 
     private void LinkHeadEvent()
@@ -103,7 +126,12 @@ public class Snake : MonoBehaviour
 
     private void TouchObs()
     {
+        _isDead = true;
+    }
 
+    private void CheckLife()
+    {
+        if (_isDead) Reset();
     }
 
     private void MoveForward()
