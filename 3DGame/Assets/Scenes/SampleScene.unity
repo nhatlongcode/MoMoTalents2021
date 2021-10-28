@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHeight: 3
   minDrag: 0
-  dragModifier: 4000
+  dragModifier: 5300
 --- !u!54 &1305524119
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -655,7 +655,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.497
   m_Pitch: 1
   Loop: 0
   Mute: 0
