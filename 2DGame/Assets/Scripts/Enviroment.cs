@@ -27,6 +27,6 @@ public class Enviroment : MonoBehaviour
             Random.Range(camPos.y - spawnRange.y, camPos.y + spawnRange.y));
         Color color = fruitRandomColors[Random.Range(0, fruitRandomColors.Count)];
         GameObject go = Instantiate(fruitPrefab,pos, Quaternion.identity, this.transform);
-        go.GetComponent<Light>().color = color;
+        go.GetComponent<SpriteRenderer>().color = color;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
+    public bool isBot;
     public float defaultSpeed;
     public float extraSpeed;
     public float currentSpeed;
@@ -104,6 +105,10 @@ public class Snake : MonoBehaviour
             Destroy(body.gameObject);
         }
         _bodyParts.Clear();
+    }
+
+    public void UpdateCameraZoom()
+    { 
     }
 
     private void LinkHeadEvent()
