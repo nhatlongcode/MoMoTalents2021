@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public Cube cubePrefab;
-    public Transform spawnPoint;
+    public Vector2 randomCubeRange;
     public Transform touchPoint;
     public float spawnTimeCount;
     public float speed;
@@ -62,7 +62,9 @@ public class GameManager : MonoBehaviour
         for (int i=0; i< _beatData.noteDatas.Count; i++)
         {
             float s = speed * _beatData.noteDatas[i].timestamp;
-            Cube cube = Instantiate(cubePrefab, touchPoint.position + Vector3.forward * s, Quaternion.identity, this.transform);
+            Vector3 pos = touchPoint.position + Vector3.forward * s;
+            pos.x += Random.Range(randomCubeRange.x, randomCubeRange.y);
+            Cube cube = Instantiate(cubePrefab, pos, Quaternion.identity, this.transform);
             cube.Init(speed, touchPoint.transform.position);
             _listCube.Add(cube);
         }
