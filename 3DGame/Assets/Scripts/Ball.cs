@@ -5,18 +5,16 @@ public class Ball : MonoBehaviour
     public float maxHeight;
     public float minDrag;
     public float dragModifier;
-    float timeCounter;
-    float distance;
-    Vector3 beginPos;
-    Vector3 startPos;
-    Vector3 dist;
-    bool isDraging;
+    private float _timeCounter;
+    private float _distance;
+    private Vector3 _beginPos;
+    private bool _isDraging;
 
     private void Start() 
     {
-        beginPos = transform.position;
-        distance =  Vector3.Distance(GameManager.Instance.GetCurrentCubePos(), beginPos);
-        timeCounter = 0.0f;
+        _beginPos = transform.position;
+        _distance =  Vector3.Distance(GameManager.Instance.GetCurrentCubePos(), _beginPos);
+        _timeCounter = 0.0f;
     }
 
     public void InputProcess()
@@ -28,23 +26,23 @@ public class Ball : MonoBehaviour
 
     public void MoveProcess() 
     {
-        timeCounter += Time.deltaTime;
+        _timeCounter += Time.deltaTime;
         float speed = GameManager.Instance.speed;
-        float y = maxHeight * Mathf.Sin(Mathf.PI * speed * timeCounter / distance);
-        Vector3 newPos = new Vector3(this.transform.position.x, beginPos.y + y, beginPos.z);
+        float y = maxHeight * Mathf.Sin(Mathf.PI * speed * _timeCounter / _distance);
+        Vector3 newPos = new Vector3(this.transform.position.x, _beginPos.y + y, _beginPos.z);
 
         if (Input.GetMouseButtonDown(0)) 
         {
             startMouseX = Input.mousePosition.x;
-            isDraging = true;
+            _isDraging = true;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            isDraging = false;
+            _isDraging = false;
         }
 
-        if (isDraging)
+        if (_isDraging)
         {
             float x = Input.mousePosition.x;
             if (Mathf.Abs(x - startMouseX) > minDrag)
@@ -64,11 +62,11 @@ public class Ball : MonoBehaviour
         if (other.tag == "Cube")
         {
             other.GetComponent<Cube>().Touch();
-            timeCounter = 0.0f;
-            Vector3 resetPos = new Vector3(transform.position.x, beginPos.y, transform.position.z);
+            _timeCounter = 0.0f;
+            Vector3 resetPos = new Vector3(transform.position.x, _beginPos.y, transform.position.z);
             this.transform.position = resetPos;
             GameManager.Instance.currentNote++;
-            distance = Vector3.Distance(GameManager.Instance.GetCurrentCubePos(), beginPos);
+            _distance = Vector3.Distance(GameManager.Instance.GetCurrentCubePos(), _beginPos);
         }   
 
         if (other.tag == "Plane")

@@ -18,7 +18,7 @@ public class Snake : MonoBehaviour
     public int minBodyCount;
     public int startBodyCount;
     public List<SnakeThemeData> skins;
-    private SnakeThemeData currentSkin;
+    private SnakeThemeData _currentSkin;
     private Transform _lastNode;
     private List<SnakeBody> _bodyParts;
     private Vector2 _mousePos;
@@ -108,7 +108,7 @@ public class Snake : MonoBehaviour
         SnakeBody body = Instantiate(bodyPrefab, _lastNode.position, Quaternion.identity, this.transform);
         body.PreviousNode = _lastNode;
         body.spriteRenderer.sortingOrder = _currentOrder;;
-        body.spriteRenderer.sprite = currentSkin.bodySprite;
+        body.spriteRenderer.sprite = _currentSkin.bodySprite;
         body.transform.localScale = Vector3.one * currentSize;
         if (isBot) body.tag = "BotBody";
         _currentOrder--;
@@ -135,8 +135,8 @@ public class Snake : MonoBehaviour
 
     public void ChooseRandomSkin()
     {
-        currentSkin = skins[Random.Range(0, skins.Count)];
-        head.spriteRenderer.sprite = currentSkin.bodySprite;
+        _currentSkin = skins[Random.Range(0, skins.Count)];
+        head.spriteRenderer.sprite = _currentSkin.bodySprite;
     }
 
     public void UpdateCameraZoom()
