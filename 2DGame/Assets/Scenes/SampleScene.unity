@@ -243,9 +243,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 80252174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0099be304f38052469fc2acc582cb23f, type: 3}
+  m_Script: {fileID: 11500000, guid: 90ec74e1cde395447a58bdc26efac7a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 80252176}
 --- !u!1 &150376944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,7 +1349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBot: 0
   defaultSpeed: 2
-  extraSpeed: 1
+  extraSpeed: 0.5
   currentSpeed: 0
   defaultSize: 0.3
   growthSize: 0.004
@@ -1360,6 +1361,15 @@ MonoBehaviour:
   bodyPrefab: {fileID: 3534894199914443851, guid: 53df44fd1bf931742b1eb7f1ba5c80f1, type: 3}
   minBodyCount: 8
   startBodyCount: 8
+  skins:
+  - {fileID: 11400000, guid: 23d142cc913b4094d897b45c3ce74315, type: 2}
+  - {fileID: 11400000, guid: 22fb04a1d6482004dae5dc7d642ff21f, type: 2}
+  - {fileID: 11400000, guid: 8f0a8210cfaa92144b308b4fd17f2287, type: 2}
+  - {fileID: 11400000, guid: a545088699588d847b1b93f8e9ba6dca, type: 2}
+  - {fileID: 11400000, guid: 22fb04a1d6482004dae5dc7d642ff21f, type: 2}
+  - {fileID: 11400000, guid: a545088699588d847b1b93f8e9ba6dca, type: 2}
+  - {fileID: 11400000, guid: 8f0a8210cfaa92144b308b4fd17f2287, type: 2}
+  - {fileID: 11400000, guid: 23d142cc913b4094d897b45c3ce74315, type: 2}
 --- !u!4 &1460655638
 Transform:
   m_ObjectHideFlags: 0

@@ -10,13 +10,15 @@ public class Snake : MonoBehaviour
     public float defaultSize;
     public float growthSize;
     public float currentSize;
-    public HeadColliderInteract head;
+    public SnakeHead head;
     public float turnSpeed;
     public float bodyFollowTime;
     public float bodyFollowGrowth;
     public SnakeBody bodyPrefab;
     public int minBodyCount;
     public int startBodyCount;
+    public List<SnakeThemeData> skins;
+    private SnakeThemeData currentSkin;
     private Transform _lastNode;
     private List<SnakeBody> _bodyParts;
     private Vector2 _mousePos;
@@ -47,6 +49,7 @@ public class Snake : MonoBehaviour
     {
         ResetParameters();
         ResetPosition();
+        ChooseRandomSkin();
         ClearSnakeBody();
         AddNewSnakeBodies(startBodyCount);
         SetDefaultSize();
@@ -84,6 +87,7 @@ public class Snake : MonoBehaviour
         SnakeBody body = Instantiate(bodyPrefab, _lastNode.position, Quaternion.identity, this.transform);
         body.PreviousNode = _lastNode;
         body.spriteRenderer.sortingOrder = _currentOrder;;
+        body.spriteRenderer.sprite = currentSkin.bodySprite;
         body.transform.localScale = Vector3.one * currentSize;
         _currentOrder--;
         _lastNode = body.transform;
@@ -105,6 +109,12 @@ public class Snake : MonoBehaviour
             Destroy(body.gameObject);
         }
         _bodyParts.Clear();
+    }
+
+    public void ChooseRandomSkin()
+    {
+        currentSkin = skins[Random.Range(0, skins.Count)];
+        head.spriteRenderer.sprite = currentSkin.bodySprite;
     }
 
     public void UpdateCameraZoom()

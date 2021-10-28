@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 
-public class HeadColliderInteract : MonoBehaviour
+public class SnakeHead : MonoBehaviour
 {
+    public SpriteRenderer spriteRenderer;
     public Action EAT_FRUIT_EVENT;
     public Action TOUCH_OBS_EVENT;
 
